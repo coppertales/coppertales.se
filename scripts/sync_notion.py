@@ -3,12 +3,7 @@
 sync_notion.py
 ==============
 Hämtar allt innehåll från Notion och sparar som JSON i /data/.
-
-Databaser som synkas:
-  - Hundarna  → data/dogs.json
-  - Kull      → data/litters.json
-  - Blogg     → data/blog.json
-  - Galleri   → data/gallery.json
+Bilder laddas ner och sparas i /data/img/ så de aldrig försvinner.
 
 Miljövariabler (GitHub Secrets):
   NOTION_TOKEN
@@ -18,8 +13,9 @@ Miljövariabler (GitHub Secrets):
   NOTION_GALLERY_DB_ID
 """
 
-import os, json, re, urllib.request, urllib.error
+import os, json, re, hashlib, urllib.request, urllib.error, urllib.parse
 from datetime import datetime, timezone
+from pathlib import Path
 
 NOTION_TOKEN         = os.environ.get("NOTION_TOKEN", "")
 NOTION_DOGS_DB_ID    = os.environ.get("NOTION_DOGS_DB_ID", "")
@@ -29,6 +25,7 @@ NOTION_GALLERY_DB_ID = os.environ.get("NOTION_GALLERY_DB_ID", "")
 
 NOTION_API_BASE = "https://api.notion.com/v1"
 NOTION_VERSION  = "2022-06-28"
+IMG_DIR         = Path("data/img")
 
 # ── Notion API ────────────────────────────────────────────────
 
@@ -42,7 +39,7 @@ def notion_request(method, path, body=None):
     data = json.dumps(body).encode() if body else None
     req  = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=30) as r:
             return json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
         print(f"  [FEL] HTTP {e.code} – {path}")
@@ -69,6 +66,58 @@ def get_page_blocks(page_id):
                if resp.get("has_more") else None
     return blocks
 
+# ── Bildhantering ─────────────────────────────────────────────
+
+def download_image(url: str, prefix: str = "") -> str:
+    """
+    Laddar ner en bild från URL och sparar den i data/img/.
+    Returnerar den lokala sökvägen (relativ till repots rot).
+    Om nedladdningen misslyckas returneras originalurl:en.
+    """
+    if not url or url.startswith("data/img/"):
+        return url  # redan lokal
+
+    IMG_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Skapa ett stabilt filnamn baserat på URL-hash
+    url_hash  = hashlib.md5(url.encode()).hexdigest()[:12]
+    # Försök ta tillvara filextensionen från URL:en
+    parsed    = urllib.parse.urlparse(url)
+    path_part = parsed.path.lower()
+    if ".jpg" in path_part or ".jpeg" in path_part:
+        ext = ".jpg"
+    elif ".png" in path_part:
+        ext = ".png"
+    elif ".gif" in path_part:
+        ext = ".gif"
+    elif ".webp" in path_part:
+        ext = ".webp"
+    else:
+        ext = ".jpg"  # fallback
+
+    filename  = f"{prefix}{url_hash}{ext}"
+    local_path = IMG_DIR / filename
+    web_path   = f"data/img/{filename}"
+
+    # Hoppa över om bilden redan är nedladdad
+    if local_path.exists():
+        return web_path
+
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            local_path.write_bytes(resp.read())
+        print(f"    ↓ {filename}")
+        return web_path
+    except Exception as e:
+        print(f"    [VARNING] Kunde inte ladda ner bild: {e}")
+        return url  # använd originalurl om nedladdning misslyckas
+
+def download_images(urls: list, prefix: str = "") -> list:
+    return [download_image(u, prefix) for u in urls if u]
+
+# ── Hjälpfunktioner ───────────────────────────────────────────
+
 def rich_text(rt):
     return "".join(t.get("plain_text", "") for t in (rt or []))
 
@@ -83,7 +132,7 @@ def file_urls(prop):
     for f in prop.get("files", []):
         if f.get("type") == "external": urls.append(f["external"].get("url", ""))
         elif f.get("type") == "file":   urls.append(f["file"].get("url", ""))
-    return urls
+    return [u for u in urls if u]
 
 def notion_date(prop):
     return (prop.get("date") or {}).get("start", "")
@@ -105,8 +154,11 @@ def blocks_to_content(blocks):
             text = rich_text(b[t].get("rich_text", []))
             if text.strip(): content.append({"type": "heading", "text": text})
         elif t == "image":
-            url = b["image"].get("external", {}).get("url") or b["image"].get("file", {}).get("url", "")
-            if url: content.append({"type": "image", "url": url})
+            raw_url = b["image"].get("external", {}).get("url") or \
+                      b["image"].get("file", {}).get("url", "")
+            if raw_url:
+                local = download_image(raw_url, "blog_")
+                content.append({"type": "image", "url": local})
         elif t == "bulleted_list_item":
             text = rich_text(b[t].get("rich_text", []))
             if text.strip(): content.append({"type": "paragraph", "text": f"• {text}"})
@@ -125,22 +177,21 @@ def now():
 def sync_dogs():
     print("→ Synkar hundarna...")
     if not NOTION_DOGS_DB_ID:
-        print("  [VARNING] NOTION_DOGS_DB_ID saknas.")
-        save("data/dogs.json", {"dogs": [], "updated": now()})
-        return
+        save("data/dogs.json", {"dogs": [], "updated": now()}); return
 
     pages = query_database(NOTION_DOGS_DB_ID)
     dogs  = []
     for page in pages:
         props = page.get("properties", {})
+        raw_foto = file_url(props.get("Foto", {}))
         dogs.append({
-            "id":             clean_id(page["id"]),
-            "namn":           rich_text(props.get("Namn", {}).get("title", [])),
-            "fullstandigt":   rich_text(props.get("Fullständigt namn", {}).get("rich_text", [])),
-            "ras":            notion_select(props.get("Ras", {})),
-            "beskrivning":    rich_text(props.get("Beskrivning", {}).get("rich_text", [])),
-            "foto":           file_url(props.get("Foto", {})),
-            "sortering":      (props.get("Sortering", {}).get("number") or 99),
+            "id":           clean_id(page["id"]),
+            "namn":         rich_text(props.get("Namn", {}).get("title", [])),
+            "fullstandigt": rich_text(props.get("Fullständigt namn", {}).get("rich_text", [])),
+            "ras":          notion_select(props.get("Ras", {})),
+            "beskrivning":  rich_text(props.get("Beskrivning", {}).get("rich_text", [])),
+            "foto":         download_image(raw_foto, "dog_") if raw_foto else "",
+            "sortering":    props.get("Sortering", {}).get("number") or 99,
         })
 
     dogs.sort(key=lambda d: d["sortering"])
@@ -152,12 +203,10 @@ def sync_dogs():
 def sync_litters():
     print("→ Synkar kull...")
     if not NOTION_LITTERS_DB_ID:
-        print("  [VARNING] NOTION_LITTERS_DB_ID saknas.")
-        save("data/litters.json", {"litters": [], "updated": now()})
-        return
+        save("data/litters.json", {"litters": [], "updated": now()}); return
 
     pages   = query_database(NOTION_LITTERS_DB_ID,
-                              filter_body={"property": "Aktiv", "checkbox": {"equals": True}})
+                             filter_body={"property": "Aktiv", "checkbox": {"equals": True}})
     litters = []
     for page in pages:
         props = page.get("properties", {})
@@ -168,9 +217,9 @@ def sync_litters():
             "mor":         rich_text(props.get("Mor", {}).get("rich_text", [])),
             "far":         rich_text(props.get("Far", {}).get("rich_text", [])),
             "datum":       notion_date(props.get("Förväntad datum", {})),
-            "mor_foto":    file_url(props.get("Mor foto", {})),
-            "far_foto":    file_url(props.get("Far foto", {})),
-            "bilder":      file_urls(props.get("Kullbilder", {})),
+            "mor_foto":    download_image(file_url(props.get("Mor foto", {})), "kull_"),
+            "far_foto":    download_image(file_url(props.get("Far foto", {})), "kull_"),
+            "bilder":      download_images(file_urls(props.get("Kullbilder", {})), "kull_"),
         })
 
     save("data/litters.json", {"litters": litters, "updated": now()})
@@ -181,22 +230,21 @@ def sync_litters():
 def sync_blog():
     print("→ Synkar blogg...")
     if not NOTION_BLOG_DB_ID:
-        print("  [VARNING] NOTION_BLOG_DB_ID saknas.")
-        save("data/blog.json", {"posts": [], "updated": now()})
-        return
+        save("data/blog.json", {"posts": [], "updated": now()}); return
 
     pages = query_database(NOTION_BLOG_DB_ID,
-                            filter_body={"property": "Publicerad", "checkbox": {"equals": True}})
+                           filter_body={"property": "Publicerad", "checkbox": {"equals": True}})
     posts = []
     for page in pages:
         props = page.get("properties", {})
         pid   = page["id"]
+        raw_cover = file_url(props.get("Omslagsbild", {}))
         posts.append({
             "id":      clean_id(pid),
             "title":   rich_text(props.get("Titel", {}).get("title", [])) or "(Inlägg utan titel)",
             "summary": rich_text(props.get("Sammanfattning", {}).get("rich_text", [])),
             "date":    notion_date(props.get("Datum", {})),
-            "cover":   file_url(props.get("Omslagsbild", {})),
+            "cover":   download_image(raw_cover, "blog_") if raw_cover else "",
             "content": blocks_to_content(get_page_blocks(pid)),
         })
 
@@ -209,21 +257,19 @@ def sync_blog():
 def sync_gallery():
     print("→ Synkar galleri...")
     if not NOTION_GALLERY_DB_ID:
-        print("  [VARNING] NOTION_GALLERY_DB_ID saknas.")
-        save("data/gallery.json", {"images": [], "updated": now()})
-        return
+        save("data/gallery.json", {"images": [], "updated": now()}); return
 
     pages  = query_database(NOTION_GALLERY_DB_ID)
     images = []
     for page in pages:
-        props = page.get("properties", {})
-        url   = file_url(props.get("Bild", {}))
-        if not url:
+        props   = page.get("properties", {})
+        raw_url = file_url(props.get("Bild", {}))
+        if not raw_url:
             continue
         images.append({
             "id":       clean_id(page["id"]),
             "title":    rich_text(props.get("Titel", {}).get("title", [])),
-            "url":      url,
+            "url":      download_image(raw_url, "gallery_"),
             "category": notion_select(props.get("Kategori", {})),
             "date":     notion_date(props.get("Datum", {})),
         })
