@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blogg – Nyheter och uppdateringar från Coppertales Kennel.">
+  <link rel="canonical" href="https://coppertales.se/blogg.html">
+  <title>Blogg – Coppertales Kennel</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">Coppertales</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html#kennel">Kennel</a></li>
+      <li><a href="index.html#hundar">Hundarna</a></li>
+      <li><a href="index.html#kull">Kull</a></li>
+      <li><a href="index.html#uppfodare">Uppfödare</a></li>
+      <li><a href="blogg.html">Blogg</a></li>
+      <li><a href="galleri.html">Galleri</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Meny">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ PAGE HERO ═══ -->
+<div class="page-hero">
+  <p class="section-label">Nyheter & uppdateringar</p>
+  <h1>Bloggen</h1>
+  <div class="divider"></div>
+  <p>Följ kennelns liv – tävlingsresultat, valpar, träning och vardagsglädje.</p>
+</div>
+
+<!-- ═══ BLOGG LIST ═══ -->
+<section class="blog-list-section">
+  <div class="container">
+    <div class="blog-list" id="blog-list">
+      <div class="blogg-empty" id="blog-loading">
+        <p>Laddar inlägg…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Coppertales Kennel</div>
+        <p class="footer-tagline">Småskalig uppfödning med hjärtat på rätt ställe.<br>Munka-Ljungby, Ängelholm, Skåne.</p>
+      </div>
+      <div>
+        <h4>Navigering</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#kennel">Kennel</a></li>
+          <li><a href="index.html#hundar">Hundarna</a></li>
+          <li><a href="index.html#kull">Kull</a></li>
+          <li><a href="index.html#uppfodare">Uppfödare</a></li>
+          <li><a href="blogg.html">Blogg</a></li>
+          <li><a href="galleri.html">Galleri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Följ oss</h4>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/coppertaleskennel" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/coppertaleskennel/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© coppertales.se 2024</span>
+      <span>Med kärlek av <a href="#">C.C Web development</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Mobile menu ── */
+const navToggle = document.getElementById('nav-toggle');
+const navLinks  = document.getElementById('nav-links');
+navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+function formatDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+/* ── Load all blog posts ── */
+async function loadBlogg() {
+  const list    = document.getElementById('blog-list');
+  const loading = document.getElementById('blog-loading');
+  try {
+    const res  = await fetch('data/blog.json');
+    const data = await res.json();
+    const posts = data.posts || [];
+
+    if (posts.length === 0) {
+      loading.innerHTML = '<p>Inga inlägg ännu. Kom tillbaka snart!</p>';
+      return;
+    }
+    loading.remove();
+
+    // Kontrollera om URL har en #post-ID anchor
+    const anchor = window.location.hash;
+
+    posts.forEach(post => {
+      const card = document.createElement('article');
+      card.className = 'blog-post-card';
+      card.id = `post-${post.id}`;
+
+      const imgHtml = post.cover
+        ? `<img class="blog-post-img" src="${post.cover}" alt="${post.title}" loading="lazy">`
+        : `<div class="blog-post-img-placeholder"></div>`;
+
+      // Bygg innehållsblock (stycken)
+      let contentHtml = '';
+      if (post.content && post.content.length > 0) {
+        contentHtml = post.content.map(block => {
+          if (block.type === 'paragraph') return `<p style="margin-bottom:12px;">${block.text}</p>`;
+          if (block.type === 'heading')   return `<h3 style="margin:20px 0 8px;">${block.text}</h3>`;
+          if (block.type === 'image')     return `<img src="${block.url}" alt="" style="width:100%;border-radius:8px;margin:12px 0;" loading="lazy">`;
+          return '';
+        }).join('');
+      } else if (post.summary) {
+        contentHtml = `<p>${post.summary}</p>`;
+      }
+
+      card.innerHTML = `
+        ${imgHtml}
+        <div class="blog-post-body">
+          <div class="blogg-card-date">${formatDate(post.date)}</div>
+          <h2>${post.title}</h2>
+          ${contentHtml}
+        </div>`;
+      list.appendChild(card);
+    });
+
+    // Scrolla till anchor om den finns
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.querySelector(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
+  } catch (e) {
+    loading.innerHTML = '<p>Kunde inte ladda inlägg. Försök igen senare.</p>';
+  }
+}
+
+loadBlogg();
+</script>
+
+</body>
+</html>
