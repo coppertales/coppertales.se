@@ -34,9 +34,11 @@ jobs:
       # 3. Kör sync-skriptet (inga extra beroenden – bara standardbibliotek)
       - name: Sync Notion data
         env:
-          NOTION_TOKEN:          ${{ secrets.NOTION_TOKEN }}
-          NOTION_BLOG_DB_ID:     ${{ secrets.NOTION_BLOG_DB_ID }}
-          NOTION_GALLERY_DB_ID:  ${{ secrets.NOTION_GALLERY_DB_ID }}
+          NOTION_TOKEN:           ${{ secrets.NOTION_TOKEN }}
+          NOTION_DOGS_DB_ID:      ${{ secrets.NOTION_DOGS_DB_ID }}
+          NOTION_LITTERS_DB_ID:   ${{ secrets.NOTION_LITTERS_DB_ID }}
+          NOTION_BLOG_DB_ID:      ${{ secrets.NOTION_BLOG_DB_ID }}
+          NOTION_GALLERY_DB_ID:   ${{ secrets.NOTION_GALLERY_DB_ID }}
         run: python scripts/sync_notion.py
 
       # 4. Committa de uppdaterade JSON-filerna om det finns ändringar

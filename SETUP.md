@@ -83,11 +83,13 @@ Beräknad tid: ca 30–45 minuter.
 1. Gå till ditt repo → **Settings** → **Secrets and variables** → **Actions**.
 2. Klicka **New repository secret** och lägg till dessa tre:
 
-| Secret-namn            | Värde                              |
-|------------------------|------------------------------------|
-| `NOTION_TOKEN`         | Token från steg 5 (`secret_…`)              |
-| `NOTION_BLOG_DB_ID`    | `f591e264e7d7447f96e99008af68266a`          |
-| `NOTION_GALLERY_DB_ID` | `4fefd2aab913486f89b7adc6bec56923`          |
+| Secret-namn             | Värde                                |
+|-------------------------|--------------------------------------|
+| `NOTION_TOKEN`          | Token från steg 5 (`secret_…`)       |
+| `NOTION_DOGS_DB_ID`     | `52472d1518be4c0198894e1cb87af5e8`   |
+| `NOTION_LITTERS_DB_ID`  | `420f2b754d004a9f95b25cbcc5a9be54`   |
+| `NOTION_BLOG_DB_ID`     | `f591e264e7d7447f96e99008af68266a`   |
+| `NOTION_GALLERY_DB_ID`  | `4fefd2aab913486f89b7adc6bec56923`   |
 
 ---
 
