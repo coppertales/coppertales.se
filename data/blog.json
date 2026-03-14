@@ -5,7 +5,7 @@
       "title": "Nytt år - Ny hemsida!",
       "summary": "Testar den nya bloggen!",
       "date": "2026-03-14",
-      "cover": "data/img/blog_60b049791530.jpg",
+      "cover": "data/img/blog_b73e5e6d6d23.jpg",
       "content": [
         {
           "type": "paragraph",
@@ -13,10 +13,10 @@
         },
         {
           "type": "image",
-          "url": "data/img/blog_0f52bab35e38.png"
+          "url": "data/img/blog_533c1787b354.png"
         }
       ]
     }
   ],
-  "updated": "2026-03-14T20:47:39.718019+00:00"
+  "updated": "2026-03-14T21:02:23.619568+00:00"
 }
