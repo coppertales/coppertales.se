@@ -51,6 +51,7 @@ jobs:
             echo "Inga ändringar – inget att committa."
           else
             git commit -m "chore: synka Notion-data $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git pull --rebase
             git push
           fi
 
