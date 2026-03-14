@@ -1,17 +1,17 @@
 {
   "sections": {
     "Om kenneln": {
-      "text1": "Coppertales Kennel startades upp under 2023 med passionen för välmående hundar med gott lynne och goda egenskaper. Uppfödningen sker i liten skala, och våra hundar lever som en naturlig del av familjelivet.",
-      "text2": "Vi lägger stor vikt vid hälsotester, mentalitet och exteriör. Våra valpar föds upp i hemmet med mycket kärlek och social stimulans.",
+      "text1": "Text 1",
+      "text2": "Text 2",
       "namn": "",
-      "foto": ""
+      "foto": "data/img/content_7f4fbbcb52ab.jpg"
     },
     "Uppfödare": {
-      "text1": "Mitt namn är Louise Millycke och jag har startat upp Coppertales kennel under 2023. Min familj består av sambo, tre barn och tre hundar och vi bor i Munka-Ljungby utanför Ängelholm i Skåne.",
-      "text2": "Två av hundarna är tollare, Riverbreeze Smoothie Harmony \"Mixa\" och hennes dotter, Riverbreeze Sparkling Charisma \"Mila\". Min tredje hund är en Shetland Sheepdog, Macy \"Ipa\". Våra hundar tränas regelbundet i olika grenar men används även i praktisk jakt, apportering och eftersök.",
+      "text1": "Text 1",
+      "text2": "Text 2",
       "namn": "Louise Millycke",
-      "foto": ""
+      "foto": "data/img/content_9941f7b7459e.png"
     }
   },
-  "updated": "2026-03-14T21:03:19.751254+00:00"
+  "updated": "2026-03-14T21:06:23.041213+00:00"
 }
