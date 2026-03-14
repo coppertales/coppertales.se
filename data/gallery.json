@@ -1,12 +1,47 @@
 {
   "images": [
     {
+      "id": "323396ccd4af800e915df925c862f80b",
+      "title": "Mixa (3)",
+      "url": "data/img/gallery_b6156dfc1283.jpg",
+      "category": "Övrigt",
+      "date": "2026-03-14"
+    },
+    {
+      "id": "323396ccd4af801ca451c4a0fd54267d",
+      "title": "Mixa (1)",
+      "url": "data/img/gallery_b6156dfc1283.jpg",
+      "category": "Övrigt",
+      "date": "2026-03-14"
+    },
+    {
+      "id": "323396ccd4af8060b961c5575d262b3b",
+      "title": "Mixa (2)",
+      "url": "data/img/gallery_b6156dfc1283.jpg",
+      "category": "Övrigt",
+      "date": "2026-03-14"
+    },
+    {
       "id": "323396ccd4af809781d5fa01953ff10d",
-      "title": "Mixa & Mila",
-      "url": "data/img/gallery_ca0c8ea73444.jpg",
+      "title": "Mixa",
+      "url": "data/img/gallery_b6156dfc1283.jpg",
+      "category": "Övrigt",
+      "date": "2026-03-14"
+    },
+    {
+      "id": "323396ccd4af80ef9e1fd1e8313bb814",
+      "title": "Mixa (1)",
+      "url": "data/img/gallery_b6156dfc1283.jpg",
+      "category": "Övrigt",
+      "date": "2026-03-14"
+    },
+    {
+      "id": "323396ccd4af80f7b4d7cafd5f8bb286",
+      "title": "Mixa (2)",
+      "url": "data/img/gallery_b6156dfc1283.jpg",
       "category": "Övrigt",
       "date": "2026-03-14"
     }
   ],
-  "updated": "2026-03-14T21:16:25.357465+00:00"
+  "updated": "2026-03-14T21:26:41.232770+00:00"
 }
