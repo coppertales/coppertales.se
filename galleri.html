@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bildgalleri – Foton från Coppertales Kennel.">
+  <link rel="canonical" href="https://coppertales.se/galleri.html">
+  <title>Galleri – Coppertales Kennel</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">Coppertales</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html#kennel">Kennel</a></li>
+      <li><a href="index.html#hundar">Hundarna</a></li>
+      <li><a href="index.html#kull">Kull</a></li>
+      <li><a href="index.html#uppfodare">Uppfödare</a></li>
+      <li><a href="blogg.html">Blogg</a></li>
+      <li><a href="galleri.html">Galleri</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Meny">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ PAGE HERO ═══ -->
+<div class="page-hero">
+  <p class="section-label">Bilder från kenneln</p>
+  <h1>Galleri</h1>
+  <div class="divider"></div>
+  <p>Ögonblick med hundarna – tävling, träning och vardag.</p>
+</div>
+
+<!-- ═══ GALLERY ═══ -->
+<section class="section galleri-section" style="background:var(--cream);">
+  <div class="container">
+
+    <!-- Filterknappar (fylls i dynamiskt) -->
+    <div class="gallery-filter" id="gallery-filter"></div>
+
+    <!-- Bildgrid -->
+    <div class="galleri-grid" id="galleri-grid">
+      <p class="galleri-empty" id="gallery-loading">Laddar bilder…</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Coppertales Kennel</div>
+        <p class="footer-tagline">Småskalig uppfödning med hjärtat på rätt ställe.<br>Munka-Ljungby, Ängelholm, Skåne.</p>
+      </div>
+      <div>
+        <h4>Navigering</h4>
+        <ul class="footer-links">
+          <li><a href="index.html#kennel">Kennel</a></li>
+          <li><a href="index.html#hundar">Hundarna</a></li>
+          <li><a href="index.html#kull">Kull</a></li>
+          <li><a href="index.html#uppfodare">Uppfödare</a></li>
+          <li><a href="blogg.html">Blogg</a></li>
+          <li><a href="galleri.html">Galleri</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Följ oss</h4>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/coppertaleskennel" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/coppertaleskennel/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© coppertales.se 2024</span>
+      <span>Med kärlek av <a href="#">C.C Web development</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" id="lightbox-close">✕</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+/* ── Mobile menu ── */
+const navToggle = document.getElementById('nav-toggle');
+const navLinks  = document.getElementById('nav-links');
+navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+/* ── Lightbox ── */
+const lightbox      = document.getElementById('lightbox');
+const lightboxImg   = document.getElementById('lightbox-img');
+const lightboxClose = document.getElementById('lightbox-close');
+function openLightbox(src, alt) {
+  lightboxImg.src = src; lightboxImg.alt = alt || '';
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+lightboxClose.addEventListener('click', () => { lightbox.classList.remove('open'); document.body.style.overflow = ''; });
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) { lightbox.classList.remove('open'); document.body.style.overflow = ''; }});
+
+/* ── Load gallery ── */
+let allImages  = [];
+let activeFilter = 'Alla';
+
+async function loadGalleri() {
+  const grid    = document.getElementById('galleri-grid');
+  const filter  = document.getElementById('gallery-filter');
+  const loading = document.getElementById('gallery-loading');
+
+  try {
+    const res  = await fetch('data/gallery.json');
+    const data = await res.json();
+    allImages  = data.images || [];
+
+    if (allImages.length === 0) {
+      loading.textContent = 'Inga bilder ännu. Kom tillbaka snart!';
+      return;
+    }
+    loading.remove();
+
+    // Bygg filterknappar från unika kategorier
+    const categories = ['Alla', ...new Set(allImages.map(i => i.category).filter(Boolean))];
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (cat === 'Alla' ? ' active' : '');
+      btn.textContent = cat;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = cat;
+        renderImages();
+      });
+      filter.appendChild(btn);
+    });
+
+    renderImages();
+  } catch (e) {
+    loading.textContent = 'Kunde inte ladda galleriet.';
+  }
+}
+
+function renderImages() {
+  const grid = document.getElementById('galleri-grid');
+  grid.innerHTML = '';
+
+  const filtered = activeFilter === 'Alla'
+    ? allImages
+    : allImages.filter(i => i.category === activeFilter);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<p class="galleri-empty">Inga bilder i denna kategori.</p>';
+    return;
+  }
+
+  filtered.forEach(img => {
+    const item = document.createElement('div');
+    item.className = 'galleri-item';
+    item.innerHTML = `
+      <img src="${img.url}" alt="${img.title || ''}" loading="lazy">
+      <div class="galleri-overlay">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+      </div>`;
+    item.addEventListener('click', () => openLightbox(img.url, img.title));
+    grid.appendChild(item);
+  });
+}
+
+loadGalleri();
+</script>
+
+</body>
+</html>
