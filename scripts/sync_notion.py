@@ -11,6 +11,7 @@ Miljövariabler (GitHub Secrets):
   NOTION_LITTERS_DB_ID
   NOTION_BLOG_DB_ID
   NOTION_GALLERY_DB_ID
+  NOTION_CONTENT_DB_ID
 """
 
 import os, json, re, hashlib, urllib.request, urllib.error, urllib.parse
@@ -22,6 +23,7 @@ NOTION_DOGS_DB_ID    = os.environ.get("NOTION_DOGS_DB_ID", "")
 NOTION_LITTERS_DB_ID = os.environ.get("NOTION_LITTERS_DB_ID", "")
 NOTION_BLOG_DB_ID    = os.environ.get("NOTION_BLOG_DB_ID", "")
 NOTION_GALLERY_DB_ID = os.environ.get("NOTION_GALLERY_DB_ID", "")
+NOTION_CONTENT_DB_ID = os.environ.get("NOTION_CONTENT_DB_ID", "")
 
 NOTION_API_BASE = "https://api.notion.com/v1"
 NOTION_VERSION  = "2022-06-28"
@@ -278,6 +280,31 @@ def sync_gallery():
     save("data/gallery.json", {"images": images, "updated": now()})
     print(f"  ✓ {len(images)} bilder sparade.")
 
+# ── Sidinnehåll (Om kenneln & Uppfödare) ──────────────────────
+
+def sync_content():
+    print("→ Synkar sidinnehåll...")
+    if not NOTION_CONTENT_DB_ID:
+        save("data/content.json", {"sections": {}, "updated": now()}); return
+
+    pages    = query_database(NOTION_CONTENT_DB_ID)
+    sections = {}
+    for page in pages:
+        props   = page.get("properties", {})
+        sektion = rich_text(props.get("Sektion", {}).get("title", []))
+        if not sektion:
+            continue
+        raw_foto = file_url(props.get("Foto", {}))
+        sections[sektion] = {
+            "text1": rich_text(props.get("Text 1", {}).get("rich_text", [])),
+            "text2": rich_text(props.get("Text 2", {}).get("rich_text", [])),
+            "namn":  rich_text(props.get("Namn",   {}).get("rich_text", [])),
+            "foto":  download_image(raw_foto, "content_") if raw_foto else "",
+        }
+
+    save("data/content.json", {"sections": sections, "updated": now()})
+    print(f"  ✓ {len(sections)} sektioner sparade.")
+
 # ── Main ──────────────────────────────────────────────────────
 
 if __name__ == "__main__":
@@ -287,4 +314,5 @@ if __name__ == "__main__":
     sync_litters()
     sync_blog()
     sync_gallery()
+    sync_content()
     print("\n✅ Sync klar!")

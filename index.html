@@ -42,7 +42,7 @@
     <h1>Coppertales Kennel</h1>
     <p>Småskalig uppfödning av Nova Scotia Duck Tolling Retriever och Shetland Sheepdog i Skåne.</p>
     <a href="#kennel" class="btn btn-primary" style="margin-right:12px">Läs mer</a>
-    <a href="#kull" class="btn btn-outline">Aktuellt kull</a>
+    <a href="#kull" class="btn btn-outline">Aktuell Kull</a>
   </div>
   <div class="hero-scroll">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -56,7 +56,7 @@
 <section class="section kennel-section" id="kennel">
   <div class="container">
     <div class="kennel-grid">
-      <div>
+      <div id="kennel-text">
         <p class="section-label">Om kenneln</p>
         <h2 class="section-heading">Coppertales<br>Kennel</h2>
         <div class="divider left"></div>
@@ -67,8 +67,8 @@
           <span class="breed-tag">Shetland Sheepdog</span>
         </div>
       </div>
-      <div class="kennel-image-wrap">
-        <img src="img/kennel.jpg" alt="Coppertales Kennel" loading="lazy">
+      <div class="kennel-image-wrap" id="kennel-img-wrap">
+        <img src="img/kennel.jpg" alt="Coppertales Kennel" loading="lazy" id="kennel-img">
         <div class="kennel-image-badge">2023<span>Grundat</span></div>
       </div>
     </div>
@@ -94,7 +94,7 @@
   <div class="container">
     <div class="text-center">
       <p class="section-label">Uppfödning</p>
-      <h2 class="section-heading">Aktuellt kull</h2>
+      <h2 class="section-heading">Aktuell Kull</h2>
       <div class="divider"></div>
     </div>
     <div id="kull-container">
@@ -106,14 +106,14 @@
 <!-- ═══ UPPFÖDARE ═══ -->
 <section class="section uppfodare-section" id="uppfodare">
   <div class="container">
-    <div class="uppfodare-grid">
-      <img class="uppfodare-img" src="img/louise.jpg" alt="Louise Millycke" loading="lazy">
-      <div>
+    <div class="uppfodare-grid" id="uppfodare-grid">
+      <img class="uppfodare-img" src="img/louise.jpg" alt="Louise Millycke" loading="lazy" id="uppfodare-img">
+      <div id="uppfodare-text">
         <p class="section-label">Uppfödare</p>
-        <h2 class="section-heading">Louise Millycke</h2>
+        <h2 class="section-heading" id="uppfodare-namn">Louise Millycke</h2>
         <div class="divider left"></div>
-        <p>Mitt namn är Louise Millycke och jag har startat upp Coppertales kennel under 2023. Min familj består av sambo, tre barn och tre hundar och vi bor i Munka-Ljungby utanför Ängelholm i Skåne.</p>
-        <p style="margin-top:1rem;">Två av hundarna är tollare, Riverbreeze Smoothie Harmony "Mixa" och hennes dotter, Riverbreeze Sparkling Charisma "Mila". Min tredje hund är en Shetland Sheepdog, Macy "Ipa". Våra hundar tränas regelbundet i olika grenar men används även i praktisk jakt, apportering och eftersök.</p>
+        <p id="uppfodare-p1">Mitt namn är Louise Millycke och jag har startat upp Coppertales kennel under 2023. Min familj består av sambo, tre barn och tre hundar och vi bor i Munka-Ljungby utanför Ängelholm i Skåne.</p>
+        <p style="margin-top:1rem;" id="uppfodare-p2">Två av hundarna är tollare, Riverbreeze Smoothie Harmony "Mixa" och hennes dotter, Riverbreeze Sparkling Charisma "Mila". Min tredje hund är en Shetland Sheepdog, Macy "Ipa". Våra hundar tränas regelbundet i olika grenar men används även i praktisk jakt, apportering och eftersök.</p>
       </div>
     </div>
   </div>
@@ -186,7 +186,7 @@
     </div>
     <div class="footer-bottom">
       <span>© coppertales.se 2024</span>
-      <span>Med kärlek av <a href="#">C.C Web development</a></span>
+      <span>Med kärlek av <a href="#">Millycke Webbdesign</a></span>
     </div>
   </div>
 </footer>
@@ -395,7 +395,62 @@ async function loadGalleri() {
   }
 }
 
+/* ══════════════════════════════════════════
+   SIDINNEHÅLL (Om kenneln & Uppfödare)
+══════════════════════════════════════════ */
+async function loadContent() {
+  try {
+    const data     = await fetch('data/content.json').then(r => r.json());
+    const sections = data.sections || {};
+
+    // ── Om kenneln ──
+    const kennel = sections['Om kenneln'];
+    if (kennel) {
+      const textWrap = document.getElementById('kennel-text');
+      if (kennel.text1) {
+        const ps = textWrap.querySelectorAll('p');
+        if (ps[0]) ps[0].textContent = kennel.text1;
+      }
+      if (kennel.text2) {
+        let p2 = textWrap.querySelectorAll('p')[1];
+        if (!p2) { p2 = document.createElement('p'); p2.style.marginTop = '1rem'; textWrap.insertBefore(p2, textWrap.querySelector('.kennel-breeds')); }
+        p2.textContent = kennel.text2;
+      }
+      if (kennel.foto) {
+        const img = document.getElementById('kennel-img');
+        if (img) img.src = kennel.foto;
+      }
+    }
+
+    // ── Uppfödare ──
+    const uppf = sections['Uppfödare'];
+    if (uppf) {
+      if (uppf.namn) {
+        const el = document.getElementById('uppfodare-namn');
+        if (el) el.textContent = uppf.namn;
+        const img = document.getElementById('uppfodare-img');
+        if (img) img.alt = uppf.namn;
+      }
+      if (uppf.text1) {
+        const el = document.getElementById('uppfodare-p1');
+        if (el) el.textContent = uppf.text1;
+      }
+      if (uppf.text2) {
+        const el = document.getElementById('uppfodare-p2');
+        if (el) el.textContent = uppf.text2;
+      }
+      if (uppf.foto) {
+        const img = document.getElementById('uppfodare-img');
+        if (img) img.src = uppf.foto;
+      }
+    }
+  } catch(e) {
+    // Faller tillbaka på hårdkodat innehåll om filen saknas
+  }
+}
+
 /* ── Ladda allt ── */
+loadContent();
 loadHundar();
 loadKull();
 loadBlogg();
