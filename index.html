@@ -201,7 +201,7 @@
           </div>
         </div>
       </div>
-      <form class="kontakt-form" id="kontakt-form" onsubmit="submitKontakt(event)">
+      <form class="kontakt-form" id="kontakt-form" onsubmit="submitKontakt(event)" novalidate>
         <div class="form-group">
           <label for="k-namn">Namn</label>
           <input type="text" id="k-namn" name="namn" placeholder="Ditt namn" required>
@@ -530,21 +530,37 @@ async function loadContent() {
 /* ══════════════════════════════════════════
    KONTAKTFORMULÄR
 ══════════════════════════════════════════ */
-function submitKontakt(e) {
+async function submitKontakt(e) {
   e.preventDefault();
-  const namn       = document.getElementById('k-namn').value;
-  const email      = document.getElementById('k-email').value;
-  const amne       = document.getElementById('k-amne');
-  const amneText   = amne.options[amne.selectedIndex].text;
-  const meddelande = document.getElementById('k-meddelande').value;
-  const status     = document.getElementById('form-status');
+  const form   = document.getElementById('kontakt-form');
+  const btn    = form.querySelector('button[type="submit"]');
+  const status = document.getElementById('form-status');
 
-  const subject = encodeURIComponent(`${amneText} – ${namn}`);
-  const body    = encodeURIComponent(`Namn: ${namn}\nE-post: ${email}\nÄmne: ${amneText}\n\n${meddelande}`);
-  window.location.href = `mailto:coppertales@hotmail.com?subject=${subject}&body=${body}`;
+  btn.disabled    = true;
+  btn.textContent = 'Skickar…';
+  status.textContent = '';
 
-  status.textContent = 'Ditt e-postprogram öppnas nu. Tack för ditt meddelande!';
-  status.style.color = 'var(--copper)';
+  try {
+    const res = await fetch('https://formspree.io/f/xwvrnbvv', {
+      method:  'POST',
+      headers: { 'Accept': 'application/json' },
+      body:    new FormData(form),
+    });
+
+    if (res.ok) {
+      form.reset();
+      btn.textContent    = 'Skickat ✓';
+      status.textContent = 'Tack! Vi återkommer så snart vi kan.';
+      status.style.color = 'var(--copper)';
+    } else {
+      throw new Error('server');
+    }
+  } catch {
+    btn.disabled    = false;
+    btn.textContent = 'Skicka meddelande';
+    status.textContent = 'Något gick fel – försök igen eller maila oss direkt.';
+    status.style.color = '#c0392b';
+  }
 }
 
 /* ── Ladda allt ── */
