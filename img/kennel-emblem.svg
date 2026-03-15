@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <style>
+      .cream { fill: #F7F3EE; }
+      .green { fill: #2D4A3E; }
+      .copper { fill: #B5703A; }
+      .copper-stroke { stroke: #B5703A; fill: none; }
+      .green-stroke { stroke: #2D4A3E; fill: none; }
+      text { font-family: 'Cormorant Garamond', Georgia, serif; }
+    </style>
+  </defs>
+
+  <!-- Bakgrund -->
+  <circle cx="250" cy="250" r="240" fill="#F7F3EE"/>
+
+  <!-- Yttre ring - koppar -->
+  <circle cx="250" cy="250" r="236" fill="none" stroke="#B5703A" stroke-width="2.5"/>
+  <!-- Yttre ring - grön -->
+  <circle cx="250" cy="250" r="228" fill="none" stroke="#2D4A3E" stroke-width="1.2"/>
+
+  <!-- Inre cirkel grön -->
+  <circle cx="250" cy="250" r="200" fill="#2D4A3E"/>
+
+  <!-- Inre ring koppar -->
+  <circle cx="250" cy="250" r="195" fill="none" stroke="#B5703A" stroke-width="1.5"/>
+
+  <!-- Dekorativ liten inre ring -->
+  <circle cx="250" cy="250" r="188" fill="none" stroke="#B5703A" stroke-width="0.6" stroke-dasharray="4,4"/>
+
+  <!-- === HUND SILHUETT (Toller i sittande position) === -->
+  <g transform="translate(250,255) scale(1)" fill="#F7F3EE">
+    <!-- Kropp -->
+    <ellipse cx="0" cy="30" rx="62" ry="48" fill="#F7F3EE"/>
+    <!-- Bröstkorg -->
+    <ellipse cx="-18" cy="18" rx="40" ry="34" fill="#F7F3EE"/>
+    <!-- Hals -->
+    <rect x="-30" y="-22" width="28" height="32" rx="12" fill="#F7F3EE"/>
+    <!-- Huvud -->
+    <ellipse cx="-20" cy="-42" rx="30" ry="26" fill="#F7F3EE"/>
+    <!-- Nos/mule -->
+    <ellipse cx="-38" cy="-36" rx="14" ry="10" fill="#F7F3EE"/>
+    <!-- Öra hängande -->
+    <ellipse cx="-4" cy="-30" rx="11" ry="22" transform="rotate(15,-4,-30)" fill="#C8C0B4"/>
+    <!-- Öga -->
+    <circle cx="-26" cy="-46" r="4" fill="#2D4A3E"/>
+    <circle cx="-24" cy="-47" r="1.2" fill="#F7F3EE"/>
+    <!-- Nos -->
+    <ellipse cx="-47" cy="-34" rx="5" ry="3.5" fill="#2D4A3E"/>
+    <!-- Framben vänster -->
+    <rect x="-52" y="45" width="16" height="48" rx="8" fill="#F7F3EE"/>
+    <!-- Framben höger -->
+    <rect x="-28" y="48" width="16" height="46" rx="8" fill="#F7F3EE"/>
+    <!-- Bakben -->
+    <ellipse cx="42" cy="65" rx="18" ry="14" fill="#F7F3EE"/>
+    <rect x="32" y="68" width="16" height="38" rx="8" fill="#F7F3EE"/>
+    <!-- Svans uppåt (typisk Toller) -->
+    <path d="M58,10 Q90,-30 75,-70 Q65,-55 68,-30 Q50,0 42,20 Z" fill="#C8C0B4"/>
+  </g>
+
+  <!-- === BOTANISKA DEKORATIONER === -->
+  <!-- Vänster gren -->
+  <g fill="#B5703A" opacity="0.85">
+    <!-- Stjälk vänster -->
+    <path d="M80,280 Q100,240 120,200" stroke="#B5703A" stroke-width="1.8" fill="none"/>
+    <!-- Blad vänster 1 -->
+    <ellipse cx="88" cy="262" rx="14" ry="6" transform="rotate(-50,88,262)" fill="#B5703A"/>
+    <!-- Blad vänster 2 -->
+    <ellipse cx="100" cy="238" rx="14" ry="6" transform="rotate(-40,100,238)" fill="#B5703A"/>
+    <!-- Blad vänster 3 -->
+    <ellipse cx="112" cy="216" rx="13" ry="5.5" transform="rotate(-30,112,216)" fill="#B5703A"/>
+    <!-- Liten blomma vänster -->
+    <circle cx="120" cy="200" r="5" fill="#C98A56"/>
+    <circle cx="114" cy="195" r="3" fill="#C98A56"/>
+    <circle cx="126" cy="195" r="3" fill="#C98A56"/>
+    <circle cx="120" cy="190" r="3" fill="#C98A56"/>
+  </g>
+
+  <!-- Höger gren -->
+  <g fill="#B5703A" opacity="0.85">
+    <!-- Stjälk höger -->
+    <path d="M420,280 Q400,240 380,200" stroke="#B5703A" stroke-width="1.8" fill="none"/>
+    <!-- Blad höger 1 -->
+    <ellipse cx="412" cy="262" rx="14" ry="6" transform="rotate(50,412,262)" fill="#B5703A"/>
+    <!-- Blad höger 2 -->
+    <ellipse cx="400" cy="238" rx="14" ry="6" transform="rotate(40,400,238)" fill="#B5703A"/>
+    <!-- Blad höger 3 -->
+    <ellipse cx="388" cy="216" rx="13" ry="5.5" transform="rotate(30,388,216)" fill="#B5703A"/>
+    <!-- Liten blomma höger -->
+    <circle cx="380" cy="200" r="5" fill="#C98A56"/>
+    <circle cx="374" cy="195" r="3" fill="#C98A56"/>
+    <circle cx="386" cy="195" r="3" fill="#C98A56"/>
+    <circle cx="380" cy="190" r="3" fill="#C98A56"/>
+  </g>
+
+  <!-- Nedre dekorativa grenar -->
+  <path d="M145,390 Q180,370 215,360" stroke="#B5703A" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M355,390 Q320,370 285,360" stroke="#B5703A" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <!-- Löv nere -->
+  <ellipse cx="158" cy="384" rx="10" ry="4.5" transform="rotate(30,158,384)" fill="#B5703A" opacity="0.7"/>
+  <ellipse cx="178" cy="373" rx="10" ry="4.5" transform="rotate(20,178,373)" fill="#B5703A" opacity="0.7"/>
+  <ellipse cx="342" cy="384" rx="10" ry="4.5" transform="rotate(-30,342,384)" fill="#B5703A" opacity="0.7"/>
+  <ellipse cx="322" cy="373" rx="10" ry="4.5" transform="rotate(-20,322,373)" fill="#B5703A" opacity="0.7"/>
+
+  <!-- Liten dekoration uppe -->
+  <line x1="220" y1="108" x2="280" y2="108" stroke="#B5703A" stroke-width="1" opacity="0.8"/>
+  <circle cx="250" cy="104" r="4" fill="#B5703A" opacity="0.8"/>
+  <circle cx="222" cy="108" r="2.5" fill="#B5703A" opacity="0.8"/>
+  <circle cx="278" cy="108" r="2.5" fill="#B5703A" opacity="0.8"/>
+
+  <!-- === TEXT === -->
+  <!-- Coppertales uppe -->
+  <text x="250" y="148" text-anchor="middle"
+        font-size="32" font-weight="600" letter-spacing="3"
+        fill="#F7F3EE">COPPERTALES</text>
+
+  <!-- Dekorativ linje under rubrik -->
+  <line x1="170" y1="160" x2="330" y2="160" stroke="#B5703A" stroke-width="1" opacity="0.7"/>
+
+  <!-- Kennel text nedan -->
+  <text x="250" y="420" text-anchor="middle"
+        font-size="18" font-weight="400" letter-spacing="6"
+        fill="#C98A56">K E N N E L</text>
+
+  <!-- Est. år -->
+  <text x="250" y="448" text-anchor="middle"
+        font-size="13" letter-spacing="2"
+        fill="#F7F3EE" opacity="0.7">EST. 2023</text>
+
+  <!-- Dekorativa punkter vid sidan av KENNEL -->
+  <circle cx="148" cy="417" r="2.5" fill="#B5703A" opacity="0.7"/>
+  <circle cx="352" cy="417" r="2.5" fill="#B5703A" opacity="0.7"/>
+  <line x1="155" y1="417" x2="190" y2="417" stroke="#B5703A" stroke-width="0.8" opacity="0.6"/>
+  <line x1="310" y1="417" x2="345" y2="417" stroke="#B5703A" stroke-width="0.8" opacity="0.6"/>
+</svg>
