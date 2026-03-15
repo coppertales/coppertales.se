@@ -1,18 +1,4 @@
 {
-  "litters": [
-    {
-      "id": "323396ccd4af807eb088ef80905cc8a5",
-      "titel": "Testkull",
-      "beskrivning": "Testkull A1 B1",
-      "mor": "Mixa",
-      "far": "Cola",
-      "datum": "2026-03-31",
-      "mor_foto": "data/img/kull_27d5dc48c97f.jpg",
-      "far_foto": "data/img/kull_39676a7d594f.jpg",
-      "bilder": [
-        "data/img/kull_c5cb5b627ae4.jpg"
-      ]
-    }
-  ],
-  "updated": "2026-03-14T21:31:14.487953+00:00"
+  "litters": [],
+  "updated": "2026-03-15T07:00:50.492477+00:00"
 }

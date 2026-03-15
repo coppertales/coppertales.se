@@ -1,23 +1,4 @@
 {
-  "dogs": [
-    {
-      "id": "323396ccd4af80859288e13f6f9a810c",
-      "namn": "Mixa",
-      "fullstandigt": "(Fullständigt namn)",
-      "ras": "Nova Scotia Duck Tolling Retriever",
-      "beskrivning": "Fina Mixa",
-      "foto": "data/img/dog_61573b7a2ee3.jpg",
-      "sortering": 9998
-    },
-    {
-      "id": "323396ccd4af809f9beac9e3fac78076",
-      "namn": "Mila",
-      "fullstandigt": "(Fullständigt namn)",
-      "ras": "Nova Scotia Duck Tolling Retriever",
-      "beskrivning": "Fina Mila",
-      "foto": "data/img/dog_dd5af338e98d.jpg",
-      "sortering": 9999
-    }
-  ],
-  "updated": "2026-03-14T21:31:13.229007+00:00"
+  "dogs": [],
+  "updated": "2026-03-15T07:00:50.226893+00:00"
 }

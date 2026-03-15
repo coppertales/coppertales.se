@@ -1,22 +1,4 @@
 {
-  "posts": [
-    {
-      "id": "323396ccd4af8032929dcb50eb5d32e6",
-      "title": "Nytt år - Ny hemsida!",
-      "summary": "Testar den nya bloggen!",
-      "date": "2026-03-14",
-      "cover": "data/img/blog_7e2f34970d6c.jpg",
-      "content": [
-        {
-          "type": "paragraph",
-          "text": "Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. Testtext… bla bla bla. "
-        },
-        {
-          "type": "image",
-          "url": "data/img/blog_37a987ef036f.png"
-        }
-      ]
-    }
-  ],
-  "updated": "2026-03-14T21:31:15.896063+00:00"
+  "posts": [],
+  "updated": "2026-03-15T07:00:50.943770+00:00"
 }
