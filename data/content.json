@@ -1,4 +1,17 @@
 {
-  "sections": {},
-  "updated": "2026-03-15T07:00:51.501888+00:00"
+  "sections": {
+    "Om kenneln": {
+      "text1": "Text 1",
+      "text2": "Text 2",
+      "namn": "",
+      "foto": ""
+    },
+    "Uppfödare": {
+      "text1": "Text 1",
+      "text2": "Text 2",
+      "namn": "Louise Millycke",
+      "foto": ""
+    }
+  },
+  "updated": "2026-03-15T07:05:24.969955+00:00"
 }
