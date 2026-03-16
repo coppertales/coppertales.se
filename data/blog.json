@@ -1,13 +1,4 @@
 {
-  "posts": [
-    {
-      "id": "324396ccd4af80f18a98cb115ddd0f8c",
-      "title": "test",
-      "summary": "",
-      "date": "2026-03-16",
-      "cover": "data/img/blog_ec11e54e21fc.webp",
-      "content": []
-    }
-  ],
-  "updated": "2026-03-16T09:17:21.041588+00:00"
+  "posts": [],
+  "updated": "2026-03-16T16:00:52.542335+00:00"
 }
