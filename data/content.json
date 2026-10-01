@@ -1,17 +1,4 @@
 {
-  "sections": {
-    "Om kenneln": {
-      "text1": "Text 1",
-      "text2": "Text 2",
-      "namn": "",
-      "foto": ""
-    },
-    "Uppfödare": {
-      "text1": "Text 1",
-      "text2": "Text 2",
-      "namn": "Louise Millycke",
-      "foto": "data/img/content_b5edc8cba68a.png"
-    }
-  },
-  "updated": "2026-09-30T11:31:52.440614+00:00"
+  "sections": {},
+  "updated": "2026-10-01T12:00:10.499211+00:00"
 }
